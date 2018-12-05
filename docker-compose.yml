@@ -1,0 +1,38 @@
+version: "2"
+services:
+  consul1:
+    image: "gliderlabs/consul-server"
+    container_name: "consul"
+    hostname: "consul1"
+    ports:
+      - "8400:8400"
+      - "8500:8500"
+#      - "172.17.0.1:53:8600"
+      - "53:8600"
+    command: "-bootstrap"
+  registrator:
+   # network_mode: host
+    image: gliderlabs/registrator
+    container_name: "registrator"
+    hostname: "registrator"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+    command: '-internal consul://172.17.0.1:8500'
+  mysql:
+    image: mysql:5.7
+    ports: 
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: myDb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: test
+      MYSQL_ROOT_PASSWORD: test 
+    volumes:
+      - ./mysql/myDb.sql:/docker-entrypoint-initdb.d/myDb.sql
+  apache:
+    build: ./apache/
+    container_name: "apache1"
+    ports:
+      - "8080:80"
+    volumes:
+       - ./www/:/var/www/html/ 
