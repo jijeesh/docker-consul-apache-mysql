@@ -20,13 +20,13 @@ services:
     command: '-internal consul://172.17.0.1:8500'
   mysql:
     image: mysql:5.7
-    ports: 
+    ports:
       - "3306:3306"
     environment:
       MYSQL_DATABASE: myDb
       MYSQL_USER: user
       MYSQL_PASSWORD: test
-      MYSQL_ROOT_PASSWORD: test 
+      MYSQL_ROOT_PASSWORD: test
     volumes:
       - ./mysql/myDb.sql:/docker-entrypoint-initdb.d/myDb.sql
   apache:
@@ -35,4 +35,4 @@ services:
     ports:
       - "8080:80"
     volumes:
-       - ./www/:/var/www/html/ 
+       - ./www/:/var/www/html/
